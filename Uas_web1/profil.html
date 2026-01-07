@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil | Key Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const navLinks = document.querySelector('.nav-links');
+        const loginBtn = document.querySelector('.btn-login');
+
+        if (isLoggedIn === 'true') {
+            if (loginBtn) {
+                loginBtn.parentElement.style.display = 'none';
+            }
+            const userProfile = document.createElement('li');
+            userProfile.className = 'nav-user-profile';
+            userProfile.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px; background: #f0f7ff; padding: 5px 15px; border-radius: 20px; border: 1px solid #007bff; cursor: pointer;">
+                    <i class="fas fa-user-circle" style="font-size: 20px; color: #007bff;"></i>
+                    <span style="font-weight: bold; color: #007bff; font-size: 14px;">${localStorage.getItem('currentUser')}</span>
+                    <button onclick="logout()" style="margin-left: 5px; border: none; background: none; color: #ff4d4d; cursor: pointer; font-size: 11px;">(Keluar)</button>
+                </div>
+            `;
+            navLinks.appendChild(userProfile);
+        }
+    });
+
+    function logout() {
+        if (confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
+    }
+</script>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="Logo1.png" alt="Logo">
+                <span><b>Key Library</b></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="transaksi.html">Transaksi</a></li>
+                <li><a href="profil.html" class="active">Profil</a></li>
+                <li><a href="login.html" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-page">
+        <section class="profile-hero">
+            <div class="container">
+                <h1>Profil <span></span></h1>
+                <p>Dimanapun dan kapanpun, bertualang kedalam helaian kertas bersama Key Library</p>
+            </div>
+        </section>
+
+        <section class="profile-container">
+            <div class="profile-main-card">
+                <div class="profile-text">
+                    <span class="badge">About Us</span>
+                    <h2>Key Library <span>v1.0</span></h2>
+                    <p>Key Library adalah sistem informasi perpustakaan berbasis web ini dikembangkan untuk memudahkan admin dalam mengelola proses sirkulasi buku secara efisien, tepat, dan akurat. Dengan mengusung konsep modern, sistem ini menjamin setiap data peminjaman tersimpan secara aman dalam lingkungan digital yang terintegrasi.</p>
+                    
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <i class="fas fa-bolt"></i>
+                            <div>
+                                <h4>Efisiensi</h4>
+                                <p>Proses kilat tanpa hambatan.</p>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h4>Keamanan</h4>
+                                <p>Data terenkripsi berlapis.</p>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-globe"></i>
+                            <div>
+                                <h4>Akses</h4>
+                                <p>Tersedia 24/7 di mana saja.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-visual">
+                    <img src="Logo.png" alt="App Logo" class="floating">
+                </div>
+            </div>
+
+            <div class="vision-mision-grid">
+                <div class="vision-card">
+                    <div class="icon-wrap"><i class="fas fa-eye"></i></div>
+                    <h3>Visi <span>Kami</span></h3>
+                    <p>Menjadi platform perpustakaan digital paling terpercaya yang menghubungkan pengetahuan dengan teknologi tanpa batas untuk mencerdaskan generasi masa depan.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon-wrap"><i class="fas fa-bullseye"></i></div>
+                    <h3>Misi <span>Kami</span></h3>
+                    <p>Menyediakan layanan manajemen sirkulasi buku yang otomatis, mengurangi jejak karbon dengan paperless, dan mempercepat akses informasi publik.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Key Library. Seluruh Hak Cipta Dilindungi.</p>
+    </footer>
+</body>
+</html>

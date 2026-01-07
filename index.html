@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Perpustakaan | Library of Ice and Stone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const navLinks = document.querySelector('.nav-links');
+        const loginBtn = document.querySelector('.btn-login');
+
+        if (isLoggedIn === 'true') {
+            if (loginBtn) {
+                loginBtn.parentElement.style.display = 'none';
+            }
+
+            const userProfile = document.createElement('li');
+            userProfile.className = 'nav-user-profile';
+            userProfile.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px; background: #f0f7ff; padding: 5px 15px; border-radius: 20px; border: 1px solid #007bff; cursor: pointer;">
+                    <i class="fas fa-user-circle" style="font-size: 20px; color: #007bff;"></i>
+                    <span style="font-weight: bold; color: #007bff; font-size: 14px;">${localStorage.getItem('currentUser')}</span>
+                    <button onclick="logout()" style="margin-left: 5px; border: none; background: none; color: #ff4d4d; cursor: pointer; font-size: 11px;">(Keluar)</button>
+                </div>
+            `;
+            navLinks.appendChild(userProfile);
+        }
+    });
+
+    // Fungsi untuk Logout
+    function logout() {
+        if (confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.reload(); // Refresh halaman untuk mengembalikan tombol login
+        }
+    }
+</script>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="Logo1.png" alt="Logo">
+                <span><b>Key Library</b></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Beranda</a></li>
+                <li><a href="transaksi.html">Transaksi</a></li>
+                <li><a href="profil.html">Profil</a></li>
+                <li><a href="login.html" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Bertualang di ruang buku<br><span>Dengan Key Library</span></h1>
+                <p>Membaca dimanapun dan kapanpun dengan Key Library, explore minatmu disini. Silahkan login untuk pengalaman yang lebih baik</p>
+                <div class="hero-buttons">
+                    <a href="transaksi.html" class="btn-primary">Transaksi</a>
+                    <a href="profil.html" class="btn-secondary">Lihat Fitur</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="Logo.png" alt="Library">
+            </div>
+        </section>
+
+<section class="features-grid">
+    <h2 class="section-title" style="text-align: center; margin-bottom: 40px; width: 100%;">
+        Buku-Buku <span>Terpopuler</span>
+    </h2>
+    <div class="feat-card">
+        <img src="sains.jpg" alt="Buku Fiksi">
+        <h3>Penjelajah <span>Antariksa</span></h3>
+        <p>Djoko Lelono</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Kategori: <b>Science</b></p>
+    </div>
+
+    <div class="feat-card">
+        <img src="filsafat.jpg" alt="Buku Pelajaran">
+        <h3>Filsafat <span>Pendidikan</span></h3>
+        <p>Anwar</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Category: <b>Study</b></p>
+    </div>
+
+    <div class="feat-card">
+        <img src="sejarah.jpg" alt="Buku Sejarah">
+        <h3>Sejarah <span>Indonesia</span></h3>
+        <p>Drs. Djakariah,M.Pd</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Kategori: <b>Sejarah</b></p>
+    </div>
+
+    <div class="feat-card">
+        <img src="DeeLestari.jpg" alt="Buku Fantasi">
+        <h3>Kesatria Putri & <span>Bintang Jatuh</span></h3>
+        <p>Dee Lestari</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Category: <b>Fantasy</b></p>
+    </div>
+
+    <div class="feat-card">
+        <img src="fiksi.jpg" alt="Buku Novel">
+        <h3>Laut <span>Bercerita</span></h3>
+        <p>Leila S. Chudori</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Category: <b>Fiction</b></p>
+    </div>
+</section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Key Library. Seluruh Hak Cipta Dilindungi.</p>
+    </footer>
+</body>
+</html>
