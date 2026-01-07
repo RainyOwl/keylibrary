@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun | Library of Ice and Stone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const navLinks = document.querySelector('.nav-links');
+        const loginBtn = document.querySelector('.btn-login');
+
+        if (isLoggedIn === 'true') {
+            // 1. Sembunyikan atau hapus tombol Login
+            if (loginBtn) {
+                loginBtn.parentElement.style.display = 'none';
+            }
+
+            // 2. Tambahkan Icon Orang dan Nama User
+            const userProfile = document.createElement('li');
+            userProfile.className = 'nav-user-profile';
+            userProfile.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px; background: #f0f7ff; padding: 5px 15px; border-radius: 20px; border: 1px solid #007bff; cursor: pointer;">
+                    <i class="fas fa-user-circle" style="font-size: 20px; color: #007bff;"></i>
+                    <span style="font-weight: bold; color: #007bff; font-size: 14px;">${localStorage.getItem('currentUser')}</span>
+                    <button onclick="logout()" style="margin-left: 5px; border: none; background: none; color: #ff4d4d; cursor: pointer; font-size: 11px;">(Keluar)</button>
+                </div>
+            `;
+            navLinks.appendChild(userProfile);
+        }
+    });
+
+    // Fungsi untuk Logout
+    function logout() {
+        if (confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.reload(); // Refresh halaman untuk mengembalikan tombol login
+        }
+    }
+</script>
+<body class="login-page">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="Logo1.png" alt="Logo">
+                <span><b>Key Library</b></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Buat <span>Akun Baru</span></h2>
+                <p>Daftar untuk mulai mengelola perpustakaan.</p>
+            </div>
+            
+            <form id="registerForm">
+                <div class="input-group">
+                    <label for="reg-username">Username Baru</label>
+                    <input type="text" id="reg-username" placeholder="Buat username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="reg-password">Password Baru</label>
+                    <input type="password" id="reg-password" placeholder="Buat password" required>
+                </div>
+
+                <button type="submit" class="btn-primary-full">Daftar Sekarang</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('reg-username').value;
+            const pass = document.getElementById('reg-password').value;
+
+            // Ambil data user yang sudah ada atau buat array kosong
+            let users = JSON.parse(localStorage.getItem('usersList')) || [];
+
+            // Cek apakah username sudah dipakai
+            const userExists = users.find(u => u.username === user);
+            if (userExists) {
+                alert("Username sudah terdaftar! Gunakan nama lain.");
+                return;
+            }
+
+            // Simpan user baru
+            users.push({ username: user, password: pass });
+            localStorage.setItem('usersList', JSON.stringify(users));
+
+            alert("Pendaftaran Berhasil! Silakan Login.");
+            window.location.href = 'login.html'; // Pindah ke halaman login
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Transaksi - Key Library</title>
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const navLinks = document.querySelector('.nav-links');
+        const loginBtn = document.querySelector('.btn-login');
+
+        if (isLoggedIn === 'true') {
+            // 1. Sembunyikan atau hapus tombol Login
+            if (loginBtn) {
+                loginBtn.parentElement.style.display = 'none';
+            }
+
+            // 2. Tambahkan Icon Orang dan Nama User
+            const userProfile = document.createElement('li');
+            userProfile.className = 'nav-user-profile';
+            userProfile.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px; background: #f0f7ff; padding: 5px 15px; border-radius: 20px; border: 1px solid #007bff; cursor: pointer;">
+                    <i class="fas fa-user-circle" style="font-size: 20px; color: #007bff;"></i>
+                    <span style="font-weight: bold; color: #007bff; font-size: 14px;">${localStorage.getItem('currentUser')}</span>
+                    <button onclick="logout()" style="margin-left: 5px; border: none; background: none; color: #ff4d4d; cursor: pointer; font-size: 11px;">(Keluar)</button>
+                </div>
+            `;
+            navLinks.appendChild(userProfile);
+        }
+    });
+
+    // Fungsi untuk Logout
+    function logout() {
+        if (confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.reload(); // Refresh halaman untuk mengembalikan tombol login
+        }
+    }
+</script>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="Logo1.png" alt="Logo">
+                <span><b>Key Library</b></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="transaksi.html" class="active">Transaksi</a></li>
+                <li><a href="profil.html">Profil</a></li>
+                <li><a href="login.html" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container-transaksi">
+        <section class="form-section">
+            <h2 class="section-title">Form <span>Transaksi Buku</span></h2>
+            <div class="card-form">
+                <form id="formTransaksi">
+                    <div class="input-group">
+                        <label>Judul Buku / Nama Transaksi</label>
+                        <input type="text" id="nama" placeholder="Contoh: Laut Bercerita">
+                    </div>
+                    <div class="input-group">
+                        <label>Jumlah Buku</label>
+                        <input type="number" id="jumlah" placeholder="0">
+                    </div>
+                    <div class="input-group">
+                        <label>Kategori</label>
+                        <select id="kategori">
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="Fiksi">Fiksi</option>
+                            <option value="Sains">Sains</option>
+                            <option value="Sejarah">Sejarah</option>
+                            <option value="Pendidikan">Pendidikan</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="validasiInput()" class="btn-primary-full">
+                        <i class="fas fa-save"></i> Simpan Transaksi
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <h3 class="section-title">Daftar <span>Transaksi Terbaru</span></h3>
+            <div class="table-responsive">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Transaksi - Kategori</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelData">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Key Library. Seluruh Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <script>
+    let nomor = 1;
+    let daftarTransaksi = JSON.parse(localStorage.getItem('transaksiLib')) || [];
+
+    // Fungsi untuk memuat data saat halaman dibuka
+    window.onload = function() {
+        renderTabel();
+    };
+
+    function validasiInput() {
+        const nama = document.getElementById('nama').value.trim();
+        const jumlah = document.getElementById('jumlah').value;
+        const kategori = document.getElementById('kategori').value;
+
+        if (nama === "" || jumlah === "" || kategori === "") {
+            alert("⚠️ Error: Tidak boleh ada data kosong!");
+            return;
+        }
+
+        // Simpan data ke dalam objek
+        const dataBaru = {
+            nama: nama,
+            jumlah: jumlah,
+            kategori: kategori
+        };
+
+        // Tambahkan ke array dan simpan ke LocalStorage
+        daftarTransaksi.push(dataBaru);
+        localStorage.setItem('transaksiLib', JSON.stringify(daftarTransaksi));
+
+        // Update tampilan tabel
+        renderTabel();
+
+        // Reset form
+        document.getElementById('formTransaksi').reset();
+        alert("✅ Data berhasil disimpan secara permanen di browser.");
+    }
+
+    function renderTabel() {
+        const tabel = document.getElementById('tabelData');
+        tabel.innerHTML = ""; // Kosongkan tabel sebelum render ulang
+        nomor = 1;
+
+        daftarTransaksi.forEach((item) => {
+            const baris = `
+                <tr>
+                    <td>${nomor++}</td>
+                    <td><strong>${item.nama}</strong> - <small>${item.kategori}</small></td>
+                    <td>${item.jumlah} Unit</td>
+                    <td><span class="badge-success">Tersimpan</span></td>
+                </tr>
+            `;
+            tabel.innerHTML += baris;
+        });
+    }
+
+    // Fungsi tambahan jika Anda ingin menghapus semua data
+    function hapusSemuaData() {
+        if (confirm("Hapus semua riwayat transaksi?")) {
+            localStorage.removeItem('transaksiLib');
+            daftarTransaksi = [];
+            renderTabel();
+        }
+    }
+</script>
+</body>
+</html>

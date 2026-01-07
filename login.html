@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin | Key Library</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="login-page">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="Logo1.png" alt="Logo">
+                <span><b>Key Library</b></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="transaksi.html">Transaksi</a></li>
+                <li><a href="profil.html">Profil</a></li>
+                <li id="nav-auth-item"><a href="login.html" class="btn-login active">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="Logo1.png" alt="Logo">
+                <h2>Key Library <span>Portal</span></h2>
+                <p>Silahkan login untuk mengelola perpustakaan.</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+
+                <div class="login-footer" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 20px;">
+                    <span>Belum punya akun? <a href="register.html" style="color: #007bff; font-weight: bold;">Daftar di sini</a></span>
+                    <a href="#" style="color: #fd0000;"> |Lupa password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary-full">Masuk Sekarang</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Key Library. Seluruh Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <script>
+        // 1. LOGIKA CEK STATUS LOGIN (Untuk mengubah Header)
+        document.addEventListener("DOMContentLoaded", function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const authItem = document.getElementById('nav-auth-item');
+
+            if (isLoggedIn === 'true') {
+                const currentUser = localStorage.getItem('currentUser');
+                // Ganti tombol login dengan Icon User
+                authItem.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px; background: #eef6ff; padding: 5px 15px; border-radius: 20px; border: 1px solid #007bff;">
+                        <i class="fas fa-user-circle" style="font-size: 20px; color: #007bff;"></i>
+                        <span style="font-weight: bold; color: #007bff; font-size: 14px;">${currentUser}</span>
+                        <button onclick="logout()" style="border: none; background: none; color: #ff4d4d; cursor: pointer; font-size: 11px; margin-left: 5px;">(Keluar)</button>
+                    </div>
+                `;
+            }
+        });
+
+        // 2. LOGIKA PROSES LOGIN
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userInp = document.getElementById('username').value;
+            const passInp = document.getElementById('password').value;
+
+            // Ambil data user dari LocalStorage (Data dari register.html)
+            let users = JSON.parse(localStorage.getItem('usersList')) || [];
+
+            // Cari apakah ada user & password yang cocok
+            const validUser = users.find(u => u.username === userInp && u.password === passInp);
+
+            if (validUser) {
+                // SIMPAN STATUS LOGIN
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', userInp); 
+                
+                alert("Login Berhasil! Selamat Datang, " + userInp);
+                window.location.href = 'index.html'; // Pindah ke beranda
+            } else {
+                alert("Username atau Password salah! Pastikan Anda sudah mendaftar di halaman Register.");
+            }
+        });
+
+        // 3. FUNGSI LOGOUT
+        function logout() {
+            if (confirm("Apakah Anda yakin ingin keluar?")) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                window.location.reload(); 
+            }
+        }
+    </script>
+</body>
+</html>
